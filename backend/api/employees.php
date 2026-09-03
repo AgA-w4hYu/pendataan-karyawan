@@ -97,12 +97,18 @@ function employees_list(): void
     $page = max(1, (int)($_GET['page'] ?? 1));
     $perPage = min(100, max(1, (int)($_GET['per_page'] ?? 20)));
 
-    $where = '';
+    $conditions = [];
     $params = [];
     if ($search !== '') {
-        $where = 'WHERE e.nama_lengkap LIKE ?';
+        $conditions[] = 'e.nama_lengkap LIKE ?';
         $params[] = '%' . addcslashes($search, '%_\\') . '%';
     }
+    [$filterChunks, $filterParams] = dropdown_filter_sql();
+    if ($filterChunks) {
+        $conditions = array_merge($conditions, $filterChunks);
+        $params = array_merge($params, $filterParams);
+    }
+    $where = $conditions ? 'WHERE ' . implode(' AND ', $conditions) : '';
 
     $stmt = $pdo->prepare("SELECT COUNT(*) FROM employees e $where");
     $stmt->execute($params);

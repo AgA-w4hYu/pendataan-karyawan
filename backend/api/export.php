@@ -45,8 +45,13 @@ function export_xlsx(): void
     }
     uasort($selected, fn($a, $b) => $a['urutan'] <=> $b['urutan']);
 
-    // Data
-    $employees = $pdo->query('SELECT id, nama_lengkap FROM employees ORDER BY nama_lengkap ASC, id ASC')->fetchAll();
+    // Data — bisa disaring dengan filter kolom dropdown (`filters`)
+    [$filterChunks, $filterParams] = dropdown_filter_sql();
+    $where = $filterChunks ? 'WHERE ' . implode(' AND ', $filterChunks) : '';
+    $stmt = $pdo->prepare("SELECT id, nama_lengkap FROM employees e $where
+                            ORDER BY e.nama_lengkap ASC, e.id ASC");
+    $stmt->execute($filterParams);
+    $employees = $stmt->fetchAll();
     $biodata = [];
     if (count($employees) > 0 && count($selected) > 0) {
         $ids = array_column($employees, 'id');

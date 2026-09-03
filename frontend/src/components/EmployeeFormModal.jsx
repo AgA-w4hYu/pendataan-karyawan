@@ -1,5 +1,121 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import Modal from './Modal';
+
+// Dropdown yang bisa diketik untuk mencari pilihan — berguna saat opsi sudah banyak.
+function SearchableSelect({ options = [], value = '', onChange }) {
+  const [open, setOpen] = useState(false);
+  const [query, setQuery] = useState('');
+  const wrapRef = useRef(null);
+
+  useEffect(() => {
+    if (!open) return;
+    const onDocDown = (e) => {
+      if (wrapRef.current && !wrapRef.current.contains(e.target)) setOpen(false);
+    };
+    document.addEventListener('mousedown', onDocDown);
+    return () => document.removeEventListener('mousedown', onDocDown);
+  }, [open]);
+
+  const q = query.trim().toLowerCase();
+  const filtered = q ? options.filter((opt) => opt.toLowerCase().includes(q)) : options;
+
+  const openBox = () => {
+    setQuery('');
+    setOpen(true);
+  };
+  const choose = (opt) => {
+    onChange(opt);
+    setOpen(false);
+    setQuery('');
+  };
+  const clear = () => {
+    onChange('');
+    setOpen(false);
+    setQuery('');
+  };
+
+  const base =
+    'w-full rounded-lg border border-line bg-white px-3 py-2 text-sm text-coal transition focus:border-ink focus:outline-none';
+
+  return (
+    <div className="relative" ref={wrapRef}>
+      <input
+        type="text"
+        value={open ? query : value}
+        onChange={(e) => {
+          setQuery(e.target.value);
+          setOpen(true);
+        }}
+        onFocus={() => {
+          if (!open) openBox();
+        }}
+        onKeyDown={(e) => {
+          if (e.key === 'Escape') {
+            setOpen(false);
+          } else if (e.key === 'Enter') {
+            e.preventDefault();
+            if (open) {
+              if (filtered.length > 0) choose(filtered[0]);
+            } else {
+              setOpen(true);
+            }
+          } else if (e.key === 'ArrowDown') {
+            e.preventDefault();
+            setOpen(true);
+          }
+        }}
+        placeholder={open ? 'Ketik untuk mencari pilihan…' : value ? '' : 'Ketik / pilih…'}
+        className={`${base} pr-9`}
+      />
+      <button
+        type="button"
+        tabIndex={-1}
+        onClick={() => (open ? setOpen(false) : openBox())}
+        className="absolute right-1 top-1/2 -translate-y-1/2 rounded px-2 py-1 text-[10px] leading-none text-muted transition hover:text-coal"
+        aria-label={open ? 'Tutup daftar pilihan' : 'Buka daftar pilihan'}
+      >
+        {open ? '▲' : '▼'}
+      </button>
+
+      {open && (
+        <div className="absolute left-0 right-0 top-full z-20 mt-1 max-h-44 overflow-y-auto rounded-lg border border-line bg-white py-1 shadow-lg">
+          {value !== '' && (
+            <button
+              type="button"
+              onMouseDown={(e) => {
+                e.preventDefault();
+                clear();
+              }}
+              className="block w-full px-3 py-1.5 text-left text-xs font-semibold text-clay transition hover:bg-clay/10"
+            >
+              — Kosongkan (hapus nilai)
+            </button>
+          )}
+          {filtered.length === 0 ? (
+            <div className="px-3 py-2 text-xs text-muted">Tidak ada pilihan yang cocok.</div>
+          ) : (
+            filtered.map((opt) => (
+              <button
+                key={opt}
+                type="button"
+                onMouseDown={(e) => {
+                  e.preventDefault();
+                  choose(opt);
+                }}
+                className={`block w-full px-3 py-1.5 text-left text-sm transition hover:bg-line/40 ${
+                  opt === value ? 'font-semibold text-coal' : 'text-coal/80'
+                }`}
+              >
+                {opt === value && '✓ '}
+                {opt}
+              </button>
+            ))
+          )}
+        </div>
+      )}
+    </div>
+  );
+}
 
 function FieldInput({ field, value, onChange }) {
   const base =
@@ -13,16 +129,7 @@ function FieldInput({ field, value, onChange }) {
     return <input type="number" step="any" className={base} {...common} />;
   }
   if (field.field_type === 'dropdown') {
-    return (
-      <select className={base} {...common}>
-        <option value="">—</option>
-        {(field.options || []).map((opt) => (
-          <option key={opt} value={opt}>
-            {opt}
-          </option>
-        ))}
-      </select>
-    );
+    return <SearchableSelect options={field.options || []} value={value ?? ''} onChange={onChange} />;
   }
   return <input type="text" className={base} {...common} />;
 }

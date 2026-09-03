@@ -24,6 +24,33 @@ export default function App() {
   const [exportOpen, setExportOpen] = useState(false);
   const [confirm, setConfirm] = useState(null);
 
+  // Filter baris berdasarkan kolom bertipe dropdown: { idKolom: nilai }
+  const [filters, setFilters] = useState({});
+  const dropdownFields = fields.filter((f) => f.field_type === 'dropdown');
+  const setDropdownFilter = (key, value) => {
+    setFilters((prev) => {
+      const next = { ...prev };
+      if (value === '') delete next[key];
+      else next[key] = value;
+      return next;
+    });
+  };
+
+  // Buang filter kolom yang sudah dihapus / bukan dropdown lagi
+  useEffect(() => {
+    const allowed = new Set(dropdownFields.map((f) => String(f.id)));
+    setFilters((prev) => {
+      let changed = false;
+      const next = {};
+      for (const [k, v] of Object.entries(prev)) {
+        if (allowed.has(k) && v !== '') next[k] = v;
+        else changed = true;
+      }
+      return changed ? next : prev;
+    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [fields]);
+
   const toastTimer = useRef(null);
   const showToast = (msg) => {
     setToast(msg);
@@ -51,20 +78,25 @@ export default function App() {
 
   useEffect(() => {
     setPage(1);
-  }, [debouncedSearch]);
+  }, [debouncedSearch, JSON.stringify(filters)]);
 
   // Muat daftar karyawan
   const loadEmployees = useCallback(async () => {
     setLoading(true);
     try {
-      const data = await api.getEmployees({ search: debouncedSearch, page, per_page: PER_PAGE });
+      const data = await api.getEmployees({
+        search: debouncedSearch,
+        page,
+        per_page: PER_PAGE,
+        filters: Object.keys(filters).length > 0 ? filters : undefined,
+      });
       setEmployees(data);
     } catch (e) {
       showToast(e.message);
     } finally {
       setLoading(false);
     }
-  }, [debouncedSearch, page]);
+  }, [debouncedSearch, page, filters]);
 
   useEffect(() => {
     loadEmployees();
@@ -142,7 +174,7 @@ export default function App() {
         <div className="mx-auto flex max-w-7xl flex-wrap items-center justify-between gap-3 px-4 py-4 sm:px-6">
           <div>
             <div className="font-display text-xl font-bold uppercase tracking-widest text-cream">
-              Pendataan Karyawan
+              Sistem Pendataan Karyawan
             </div>
             <div className="text-[11px] uppercase tracking-wider text-muted">Sistem Internal</div>
           </div>
@@ -187,6 +219,38 @@ export default function App() {
             </div>
           </div>
 
+          {dropdownFields.length > 0 && (
+            <div className="flex flex-wrap items-center gap-2 border-t border-line px-6 py-3">
+              <span className="mr-1 text-[10px] font-bold uppercase tracking-wider text-muted">
+                Filter Dropdown:
+              </span>
+              {dropdownFields.map((f) => (
+                <select
+                  key={f.id}
+                  value={filters[String(f.id)] ?? ''}
+                  onChange={(e) => setDropdownFilter(String(f.id), e.target.value)}
+                  title={`Filter kolom "${f.label}"`}
+                  className="max-w-[240px] cursor-pointer rounded-full border border-line bg-white px-3 py-1.5 text-xs text-coal transition hover:border-ink/40 focus:border-ink focus:outline-none"
+                >
+                  <option value="">{f.label}: Semua</option>
+                  {(f.options || []).map((opt) => (
+                    <option key={opt} value={opt}>
+                      {opt}
+                    </option>
+                  ))}
+                </select>
+              ))}
+              {Object.keys(filters).length > 0 && (
+                <button
+                  onClick={() => setFilters({})}
+                  className="rounded-full border border-clay/40 px-3 py-1.5 text-[10px] font-bold uppercase tracking-wider text-clay transition hover:bg-clay/10"
+                >
+                  ✕ Reset Filter
+                </button>
+              )}
+            </div>
+          )}
+
           <div className="overflow-x-auto">
             <table className="w-full border-collapse text-left text-sm">
               <thead>
@@ -216,8 +280,8 @@ export default function App() {
                 {!loading && employees.data.length === 0 && (
                   <tr>
                     <td colSpan={fields.length + 2} className="px-6 py-10 text-center text-sm text-muted">
-                      {debouncedSearch
-                        ? 'Tidak ada karyawan yang cocok dengan pencarian.'
+                      {debouncedSearch || Object.keys(filters).length > 0
+                        ? 'Tidak ada karyawan yang cocok dengan pencarian/filter.'
                         : 'Belum ada data karyawan. Klik "+ Tambah Karyawan" untuk mulai.'}
                     </td>
                   </tr>
@@ -292,7 +356,9 @@ export default function App() {
           onReorder={handleReorderFields}
         />
       )}
-      {exportOpen && <ExportModal fields={fields} onClose={() => setExportOpen(false)} />}
+      {exportOpen && (
+        <ExportModal fields={fields} initialFilters={filters} onClose={() => setExportOpen(false)} />
+      )}
       {confirm &&
         (confirm.action === 'employee' ? (
           <ConfirmDialog

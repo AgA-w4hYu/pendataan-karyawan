@@ -6,7 +6,8 @@ Cocok dipakai di jaringan internal kantor — **satu admin, tanpa login**.
 - ➕ Tambah / edit / hapus karyawan (dengan konfirmasi sebelum hapus)
 - 🧩 **Kolom biodata dinamis** — buat kolom sendiri kapan saja (teks, tanggal, angka, dropdown) tanpa ubah kode
 - 🔍 Pencarian nama secara real-time + pagination (ramah untuk 1000-an karyawan)
-- 📊 **Export ke Excel (.xlsx)** — pilih kolom yang mau diexport, hasilnya tabel rapi (header tebal, border, lebar kolom otomatis)
+- 🎛️ **Filter kolom Dropdown / pilihan** — saring baris tabel, cari pilihan dengan mengetik saat mengisi data, dan batasi data yang diexport
+- 📊 **Export ke Excel (.xlsx)** — pilih kolom (dan opsional filter baris) yang mau diexport, hasilnya tabel rapi (header tebal, border, lebar kolom otomatis)
 - 🗄️ Semua data tersimpan terpusat di **MySQL** (bukan banyak file Excel)
 - 🖥️ Monitor database lewat **phpMyAdmin**
 
@@ -129,8 +130,10 @@ beserta tabel-tabelnya di MySQL** — Anda tidak perlu import SQL apa pun.
 1. **Tambahkan karyawan** → klik tombol **+ Tambah Karyawan** di pojok kanan atas, isi Nama Lengkap (wajib) dan biodata lain, klik **Simpan**.
 2. **Buat kolom biodata baru** → klik **Kelola Kolom** → **+ Tambah Kolom** → isi judul kolom (misal "Nomor BPJS"), pilih tipe (Teks / Tanggal / Angka / Dropdown — untuk dropdown isi pilihan dipisah koma, misal: `IT,HRD,Finance`), klik **Simpan**. Kolom baru **langsung muncul (kosong) di semua karyawan**.
 3. **Edit / hapus karyawan** → tombol **Edit** / **Hapus** di baris karyawan. Hapus selalu menampilkan dialog konfirmasi (data dihapus **permanen**).
-4. **Cari** → ketik nama di kotak pencarian, tabel langsung terfilter.
-5. **Export ke Excel** → klik **Export ke Excel** → centang kolom yang diinginkan → **Export**. File `.xlsx` terunduh dalam bentuk tabel rapi, siap dikirim.
+4. **Cari karyawan** → ketik nama di kotak pencarian, tabel langsung terfilter.
+5. **Filter kolom Dropdown** → setiap kolom bertipe Dropdown (misal "Status", "Divisi") otomatis punya filter berbentuk pilihan **di atas tabel**. Pilih salah satu nilai (misal `Aktif`) → tabel hanya menampilkan karyawan yang cocok. Beberapa filter bisa dipakai sekaligus, dan tombol **Reset Filter** menghapus semuanya.
+6. **Isi kolom dropdown saat tambah/edit karyawan** → klik kolomnya lalu **ketik** untuk mencari pilihan dengan cepat (tidak perlu scroll panjang). Bisa juga menghapus nilai yang sudah terisi.
+7. **Export ke Excel** → klik **Export ke Excel** → centang kolom yang diinginkan → (opsional) pakai bagian **Filter Baris** agar hanya karyawan dengan nilai dropdown tertentu yang ikut ter-export → **Export**. Filter yang sedang aktif di tabel ikut diterapkan otomatis. File `.xlsx` terunduh dalam bentuk tabel rapi, siap dikirim.
 
 ### (Opsional) Isi data contoh
 Kalau ingin mencoba dengan data contoh dulu:

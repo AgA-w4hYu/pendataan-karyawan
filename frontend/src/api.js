@@ -26,7 +26,9 @@ export const api = {
   getEmployees: (params) => {
     const qs = new URLSearchParams();
     Object.entries(params).forEach(([k, v]) => {
-      if (v !== '' && v != null) qs.set(k, v);
+      if (v === '' || v == null) return;
+      // Objek (mis. filter dropdown { idField: nilai }) diubah jadi JSON string
+      qs.set(k, typeof v === 'object' ? JSON.stringify(v) : v);
     });
     return request(`/api/employees?${qs.toString()}`);
   },
@@ -36,5 +38,10 @@ export const api = {
   deleteEmployee: (id) => request(`/api/employees/${id}`, { method: 'DELETE' }),
 
   getStats: () => request('/api/stats'),
-  exportUrl: (fields) => `/api/export?fields=${fields.join(',')}`,
+  exportUrl: (fields, filters = {}) => {
+    const qs = new URLSearchParams({ fields: fields.join(',') });
+    const active = Object.fromEntries(Object.entries(filters).filter(([, v]) => v !== '' && v != null));
+    if (Object.keys(active).length > 0) qs.set('filters', JSON.stringify(active));
+    return `/api/export?${qs.toString()}`;
+  },
 };

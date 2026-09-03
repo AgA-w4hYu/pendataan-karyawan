@@ -2,12 +2,26 @@ import { useState } from 'react';
 import Modal from './Modal';
 import { api } from '../api';
 
-export default function ExportModal({ fields, onClose }) {
+export default function ExportModal({ fields, initialFilters = {}, onClose }) {
   const [selected, setSelected] = useState(() => ({
     nama: true,
     ...Object.fromEntries(fields.map((f) => [String(f.id), true])),
   }));
   const [error, setError] = useState('');
+
+  // Filter baris (khusus kolom dropdown): { idKolom: nilai }
+  const dropdownFields = fields.filter((f) => f.field_type === 'dropdown');
+  const [filters, setFilters] = useState(() =>
+    Object.fromEntries(Object.entries(initialFilters).filter(([, v]) => v !== '' && v != null)),
+  );
+  const setFilter = (key, value) => {
+    setFilters((prev) => {
+      const next = { ...prev };
+      if (value === '') delete next[key];
+      else next[key] = value;
+      return next;
+    });
+  };
 
   const toggle = (key) => setSelected((prev) => ({ ...prev, [key]: !prev[key] }));
 
@@ -17,7 +31,7 @@ export default function ExportModal({ fields, onClose }) {
       setError('Pilih minimal satu kolom untuk di-export.');
       return;
     }
-    window.location.href = api.exportUrl(keys);
+    window.location.href = api.exportUrl(keys, filters);
   };
 
   return (
@@ -48,6 +62,49 @@ export default function ExportModal({ fields, onClose }) {
           </label>
         ))}
       </div>
+
+      {dropdownFields.length > 0 && (
+        <div className="mt-4">
+          <div className="mb-1 block text-xs font-semibold uppercase tracking-wider text-muted">
+            Filter Baris (opsional)
+          </div>
+          <p className="mb-2 text-xs leading-relaxed text-coal/70">
+            Hanya untuk kolom bertipe Dropdown. Karyawan yang tidak cocok dengan filter tidak ikut
+            ter-export.
+          </p>
+          <div className="space-y-2 rounded-xl border border-line bg-white p-3">
+            {dropdownFields.map((f) => (
+              <div key={f.id} className="flex flex-wrap items-center gap-2">
+                <span className="w-40 shrink-0 truncate text-xs font-semibold text-coal" title={f.label}>
+                  {f.label}
+                </span>
+                <select
+                  value={filters[String(f.id)] ?? ''}
+                  onChange={(e) => setFilter(String(f.id), e.target.value)}
+                  className="min-w-0 flex-1 cursor-pointer rounded-lg border border-line bg-white px-3 py-1.5 text-sm text-coal transition focus:border-ink focus:outline-none"
+                >
+                  <option value="">Semua</option>
+                  {(f.options || []).map((opt) => (
+                    <option key={opt} value={opt}>
+                      {opt}
+                    </option>
+                  ))}
+                </select>
+              </div>
+            ))}
+            {Object.keys(filters).length > 0 && (
+              <div className="flex justify-end">
+                <button
+                  onClick={() => setFilters({})}
+                  className="rounded-full border border-clay/40 px-3 py-1 text-[10px] font-bold uppercase tracking-wider text-clay transition hover:bg-clay/10"
+                >
+                  Reset Filter
+                </button>
+              </div>
+            )}
+          </div>
+        </div>
+      )}
 
       {error && <div className="mt-3 rounded-lg bg-clay/10 px-3 py-2 text-sm text-clay">{error}</div>}
 

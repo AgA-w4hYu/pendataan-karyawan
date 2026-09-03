@@ -38,3 +38,55 @@ function clean_text($value, int $max = 255): string
     $value = trim((string)$value);
     return mb_strlen($value) > $max ? mb_substr($value, 0, $max) : $value;
 }
+
+/**
+ * Baca parameter GET `filters` (objek JSON: { idField: nilai }) dan kembalikan
+ * hanya filter untuk kolom bertipe dropdown. Kolom yang bukan dropdown / tidak
+ * dikenal / nilai kosong otomatis diabaikan.
+ *
+ * Contoh: /api/employees?filters={"3":"Finance"}
+ */
+function parse_dropdown_filters(): array
+{
+    $raw = $_GET['filters'] ?? '';
+    if (!is_string($raw) || trim($raw) === '') {
+        return [];
+    }
+    $decoded = json_decode($raw, true);
+    if (!is_array($decoded) || $decoded === []) {
+        return [];
+    }
+
+    $dropdownIds = [];
+    foreach (db()->query("SELECT id FROM biodata_fields WHERE field_type = 'dropdown'")->fetchAll() as $f) {
+        $dropdownIds[(int)$f['id']] = true;
+    }
+
+    $filters = [];
+    foreach ($decoded as $fieldId => $value) {
+        $fieldId = (int)$fieldId;
+        $value = trim((string)$value);
+        if ($value === '' || !isset($dropdownIds[$fieldId])) {
+            continue;
+        }
+        $filters[$fieldId] = $value;
+    }
+    return $filters;
+}
+
+/**
+ * Bangun klausa WHERE EXISTS untuk filter kolom dropdown.
+ * Mengembalikan [sqlChunks, params] siap digabung ke query karyawan.
+ */
+function dropdown_filter_sql(): array
+{
+    $chunks = [];
+    $params = [];
+    foreach (parse_dropdown_filters() as $fieldId => $value) {
+        $chunks[] = 'EXISTS (SELECT 1 FROM employee_biodata bf
+                    WHERE bf.employee_id = e.id AND bf.field_id = ? AND bf.value = ?)';
+        $params[] = $fieldId;
+        $params[] = $value;
+    }
+    return [$chunks, $params];
+}
