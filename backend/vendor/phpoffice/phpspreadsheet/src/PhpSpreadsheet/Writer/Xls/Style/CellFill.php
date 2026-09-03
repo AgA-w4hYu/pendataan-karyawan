@@ -6,7 +6,10 @@ use PhpOffice\PhpSpreadsheet\Style\Fill;
 
 class CellFill
 {
-    protected const FILL_MAP = [
+    /**
+     * @var array<string, int>
+     */
+    protected static $fillStyleMap = [
         Fill::FILL_NONE => 0x00,
         Fill::FILL_SOLID => 0x01,
         Fill::FILL_PATTERN_MEDIUMGRAY => 0x02,
@@ -32,8 +35,12 @@ class CellFill
 
     public static function style(Fill $fill): int
     {
-        $fillStyle = (string) $fill->getFillType();
+        $fillStyle = $fill->getFillType();
 
-        return self::FILL_MAP[$fillStyle] ?? self::FILL_MAP[Fill::FILL_NONE];
+        if (is_string($fillStyle) && array_key_exists($fillStyle, self::$fillStyleMap)) {
+            return self::$fillStyleMap[$fillStyle];
+        }
+
+        return self::$fillStyleMap[Fill::FILL_NONE];
     }
 }

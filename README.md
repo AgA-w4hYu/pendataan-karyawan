@@ -32,7 +32,9 @@ Detail lengkapnya ada di bawah — ikuti saja urutannya, tiap langkah dijelaskan
 ## ✅ 0. Yang Perlu Anda Siapkan
 
 1. **XAMPP** — paket lengkap berisi Apache, MySQL/MariaDB, PHP, dan phpMyAdmin.
-   Unduh dari **https://www.apachefriends.org/download.html** (pilih versi terbaru, minimal PHP 8.2).
+   Unduh dari **https://www.apachefriends.org/download.html**.
+   > Aplikasi ini mendukung **PHP 8.0 ke atas** (XAMPP versi 8.0, 8.1, 8.2, dst).
+   > Disarankan tetap memakai versi XAMPP **terbaru** untuk keamanan & performa.
 2. **Folder proyek ini** — cara mendapatkannya ada di Langkah 3.
 3. **Koneksi internet** — hanya saat mengunduh XAMPP dan proyek. Setelah itu aplikasi jalan **offline** (tidak butuh internet).
 
@@ -203,6 +205,7 @@ pendataan-karyawan/
 | **macOS/Linux: "Permission denied" saat `./start-app.sh`** | File belum executable | `chmod +x start-app.sh start-pma.sh` |
 | **Windows: jendela hitam langsung menutup** | PHP tidak ditemukan di `C:\xampp` | Install XAMPP di folder default `C:\xampp`, atau ubah baris `set "PHP=..."` di `start-app.bat` sesuai lokasi PHP Anda |
 | **MySQL Anda bukan XAMPP (misal MariaDB terpisah / pakai password)** | Lokasi/kredensial berbeda | Edit `backend/config.php` (isikan `pass` bila ada password), atau jalankan dengan variabel: `DB_HOST=127.0.0.1 DB_PORT=3306 DB_USER=root DB_PASS=rahasia ./start-app.sh start` |
+| **Halaman error: `Composer detected issues in your platform: ... require a PHP version ">= 8.2.0" ... running 8.0.30`** | Folder proyeknya versi LAMA (library lamanya butuh PHP 8.2+), atau XAMPP-nya terlalu tua | (1) Perbarui folder proyek ke versi terbaru dari GitHub (unduh ZIP lagi / `git pull`) — versi baru sudah mendukung PHP 8.0+. Kalau masih error: (2) ganti ke XAMPP versi terbaru |
 | **Angka tidak muncul / format tanggal aneh di Excel** | — | Export memakai nilai apa adanya. Untuk laporan, isi data dengan format konsisten (tanggal `YYYY-MM-DD`, angka tanpa titik ribuan) |
 
 > Belum ketemu solusinya? Periksa isi file log:
@@ -269,7 +272,7 @@ A: Edit `backend/config.php` (isi `'pass' => 'password-anda'`), atau pakai varia
 | Bagian | Teknologi |
 |---|---|
 | Frontend | React + Tailwind CSS (hasil build disertakan di `public/`) |
-| Backend | PHP 8.2+ (REST API) |
+| Backend | PHP 8.0+ (REST API) |
 | Database | MySQL / MariaDB (via XAMPP) |
 | Export Excel | PhpSpreadsheet |
 | Server | PHP built-in web server (port 8081) + phpMyAdmin (port 8080) |

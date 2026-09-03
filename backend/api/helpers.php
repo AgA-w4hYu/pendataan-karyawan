@@ -1,7 +1,10 @@
 <?php
 declare(strict_types=1);
 
-function json_response($data, int $status = 200): never
+// Catatan: return type `never` (PHP 8.1+) sengaja TIDAK dipakai agar
+// aplikasi tetap berjalan di XAMPP lama (PHP 8.0). Kedua fungsi ini
+// selalu menghentikan eksekusi (exit), jadi aman tanpa return type.
+function json_response($data, int $status = 200): void
 {
     http_response_code($status);
     header('Content-Type: application/json; charset=utf-8');
@@ -9,7 +12,7 @@ function json_response($data, int $status = 200): never
     exit;
 }
 
-function json_error(string $message, int $status = 400): never
+function json_error(string $message, int $status = 400): void
 {
     json_response(['error' => $message], $status);
 }
