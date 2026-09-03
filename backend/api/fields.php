@@ -50,7 +50,7 @@ function validate_field(array $data): array
 
 function backfill_field(int $fieldId): void
 {
-    // Sedikan baris kosong utk semua karyawan yang sudah ada,
+    // Sedikan baris kosong utk semua personel yang sudah ada,
     // agar field langsung "muncul" untuk semua data.
     db()->prepare('INSERT IGNORE INTO employee_biodata (employee_id, field_id, value)
                    SELECT id, ?, NULL FROM employees')->execute([$fieldId]);

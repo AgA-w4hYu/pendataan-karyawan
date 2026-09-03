@@ -10,8 +10,9 @@ date_default_timezone_set('Asia/Jakarta');
 //  mendeteksi lokasi MySQL di XAMPP (Linux/macOS/Windows) dan
 //  otomatis membuat database + tabel saat pertama kali diakses.
 //
-//  Ubah bagian ini HANYA jika:
-//    - MySQL Anda bukan XAMPP (misal MySQL terpisah / MariaDB sistem),
+//  Ubah bagian ini HANYA jika://  - MySQL Anda bukan XAMPP (misal MySQL terpisah / MariaDB sistem),
+//    
+//  Nama database default: pendataan_personel.
 //    - user/password MySQL Anda berbeda.
 //
 //  Semua nilai juga bisa di-override lewat variabel lingkungan
@@ -27,6 +28,6 @@ return [
         'port'   => (int)(getenv('DB_PORT') ?: 3306),
         'user'   => getenv('DB_USER') ?: 'root',
         'pass'   => getenv('DB_PASS') ?: '',
-        'name'   => getenv('DB_NAME') ?: 'pendataan_karyawan',
+        'name'   => getenv('DB_NAME') ?: 'pendataan_personel',
     ],
 ];

@@ -79,7 +79,7 @@ function parse_dropdown_filters(): array
 
 /**
  * Bangun klausa WHERE EXISTS untuk filter kolom dropdown.
- * Mengembalikan [sqlChunks, params] siap digabung ke query karyawan.
+ * Mengembalikan [sqlChunks, params] siap digabung ke query personel.
  */
 function dropdown_filter_sql(): array
 {

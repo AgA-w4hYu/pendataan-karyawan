@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Helper aplikasi Pendataan Karyawan — menjalankan frontend (sudah di-build
+# Helper aplikasi Pendataan Personel — menjalankan frontend (sudah di-build
 # di public/) + API PHP via PHP built-in server.
 # Syarat: MySQL/MariaDB (XAMPP) sudah berjalan — lihat README.md.
 #

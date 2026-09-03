@@ -80,7 +80,7 @@ export default function App() {
     setPage(1);
   }, [debouncedSearch, JSON.stringify(filters)]);
 
-  // Muat daftar karyawan
+  // Muat daftar personel
   const loadEmployees = useCallback(async () => {
     setLoading(true);
     try {
@@ -110,14 +110,14 @@ export default function App() {
       .catch(() => {});
   }, [loadEmployees]);
 
-  // ===== Karyawan =====
+  // ===== Personel =====
   const handleSaveEmployee = async (payload) => {
     if (employeeModal?.employee) {
       await api.updateEmployee(employeeModal.employee.id, payload);
-      showToast('Data karyawan diperbarui.');
+      showToast('Data personel diperbarui.');
     } else {
       await api.createEmployee(payload);
-      showToast('Karyawan baru ditambahkan.');
+      showToast('Personel baru ditambahkan.');
     }
     setEmployeeModal(null);
     refreshAll();
@@ -126,7 +126,7 @@ export default function App() {
   const handleDeleteEmployee = async () => {
     try {
       await api.deleteEmployee(confirm.id);
-      showToast('Karyawan dihapus.');
+      showToast('Personel dihapus.');
       setConfirm(null);
       refreshAll();
     } catch (e) {
@@ -174,7 +174,7 @@ export default function App() {
         <div className="mx-auto flex max-w-7xl flex-wrap items-center justify-between gap-3 px-4 py-4 sm:px-6">
           <div>
             <div className="font-display text-xl font-bold uppercase tracking-widest text-cream">
-              Sistem Pendataan Karyawan
+              Sistem Pendataan Personel
             </div>
             <div className="text-[11px] uppercase tracking-wider text-muted">Sistem Internal</div>
           </div>
@@ -195,7 +195,7 @@ export default function App() {
               onClick={() => setEmployeeModal({ employee: null })}
               className="rounded-full bg-cream px-5 py-2 text-xs font-semibold uppercase tracking-wider text-ink transition hover:bg-cream/90"
             >
-              + Tambah Karyawan
+              + Tambah Personel
             </button>
           </div>
         </div>
@@ -207,7 +207,7 @@ export default function App() {
         {/* Tabel data */}
         <section className="overflow-hidden rounded-2xl border border-line bg-cream text-coal">
           <div className="flex flex-wrap items-center justify-between gap-3 px-6 py-4">
-            <h2 className="font-display text-lg font-bold uppercase tracking-wide">Data Karyawan</h2>
+            <h2 className="font-display text-lg font-bold uppercase tracking-wide">Data Personel</h2>
             <div className="relative">
               <input
                 type="text"
@@ -281,8 +281,8 @@ export default function App() {
                   <tr>
                     <td colSpan={fields.length + 2} className="px-6 py-10 text-center text-sm text-muted">
                       {debouncedSearch || Object.keys(filters).length > 0
-                        ? 'Tidak ada karyawan yang cocok dengan pencarian/filter.'
-                        : 'Belum ada data karyawan. Klik "+ Tambah Karyawan" untuk mulai.'}
+                        ? 'Tidak ada personel yang cocok dengan pencarian/filter.'
+                        : 'Belum ada data personel. Klik "+ Tambah Personel" untuk mulai.'}
                     </td>
                   </tr>
                 )}
@@ -309,7 +309,7 @@ export default function App() {
                           <button
                             onClick={() =>
                               setConfirm({
-                                title: 'Hapus Karyawan',
+                                title: 'Hapus Personel',
                                 message: `Yakin hapus "${emp.nama_lengkap}"? Seluruh data biodatanya akan terhapus permanen dan tidak bisa dikembalikan.`,
                                 id: emp.id,
                                 action: 'employee',

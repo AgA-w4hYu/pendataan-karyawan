@@ -69,7 +69,7 @@ function export_xlsx(): void
     // Bangun spreadsheet
     $spreadsheet = new Spreadsheet();
     $sheet = $spreadsheet->getActiveSheet();
-    $sheet->setTitle('Data Karyawan');
+    $sheet->setTitle('Data Personel');
 
     $header = [];
     if ($includeNama) {
@@ -125,7 +125,7 @@ function export_xlsx(): void
     }
     $sheet->freezePane('A2');
 
-    $filename = 'data-karyawan-' . date('Ymd-His') . '.xlsx';
+    $filename = 'data-personel-' . date('Ymd-His') . '.xlsx';
     header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
     header('Content-Disposition: attachment; filename="' . $filename . '"');
     header('Cache-Control: max-age=0');

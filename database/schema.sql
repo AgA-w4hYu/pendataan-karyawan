@@ -1,15 +1,13 @@
 -- ============================================================
--- Skema Database: Sistem Pendataan Karyawan Internal
+-- Skema Database: Sistem Pendataan Personel Internal
 -- Pattern EAV (Entity-Attribute-Value) untuk biodata dinamis.
 -- Database dibuat otomatis oleh aplikasi saat pertama kali jalan;
 -- file ini untuk referensi / import manual via phpMyAdmin.
--- ============================================================
+-- ============================================================CREATE DATABASE IF NOT EXISTS pendataan_personel
+CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+USE pendataan_personel;
 
-CREATE DATABASE IF NOT EXISTS pendataan_karyawan
-  CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
-USE pendataan_karyawan;
-
--- Data inti karyawan
+-- Data inti personel
 CREATE TABLE IF NOT EXISTS employees (
   id            INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
   nama_lengkap  VARCHAR(255) NOT NULL,
@@ -27,7 +25,7 @@ CREATE TABLE IF NOT EXISTS biodata_fields (
   created_at  DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB;
 
--- Nilai biodata per karyawan per field
+-- Nilai biodata per personel per field
 CREATE TABLE IF NOT EXISTS employee_biodata (
   id          INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
   employee_id INT UNSIGNED NOT NULL,

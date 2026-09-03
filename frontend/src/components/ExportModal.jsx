@@ -69,7 +69,7 @@ export default function ExportModal({ fields, initialFilters = {}, onClose }) {
             Filter Baris (opsional)
           </div>
           <p className="mb-2 text-xs leading-relaxed text-coal/70">
-            Hanya untuk kolom bertipe Dropdown. Karyawan yang tidak cocok dengan filter tidak ikut
+            Hanya untuk kolom bertipe Dropdown. Personel yang tidak cocok dengan filter tidak ikut
             ter-export.
           </p>
           <div className="space-y-2 rounded-xl border border-line bg-white p-3">

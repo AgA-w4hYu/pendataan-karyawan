@@ -255,14 +255,14 @@ export default function FieldManagerModal({ fields, onClose, onCreate, onUpdate,
       </div>
 
       <p className="mt-4 text-xs leading-relaxed text-muted">
-        Kolom baru otomatis muncul (kosong) di semua karyawan. Mengubah judul kolom tidak menghapus data yang
-        sudah diisi. Menghapus kolom akan menghapus nilainya di semua karyawan (permanen).
+        Kolom baru otomatis muncul (kosong) di semua personel. Mengubah judul kolom tidak menghapus data yang
+        sudah diisi. Menghapus kolom akan menghapus nilainya di semua personel (permanen).
       </p>
 
       {deleteTarget && (
         <ConfirmDialog
           title="Hapus Kolom"
-          message={`Yakin hapus kolom "${deleteTarget.label}"? Seluruh nilai kolom ini di semua karyawan akan terhapus permanen dan tidak bisa dikembalikan.`}
+          message={`Yakin hapus kolom "${deleteTarget.label}"? Seluruh nilai kolom ini di semua personel akan terhapus permanen dan tidak bisa dikembalikan.`}
           onConfirm={async () => {
             try {
               await onDelete(deleteTarget.id);

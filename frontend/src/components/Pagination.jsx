@@ -13,7 +13,7 @@ export default function Pagination({ page, totalPages, total, perPage, onPage })
     <div className="flex flex-col items-center justify-between gap-3 border-t border-line px-6 py-4 sm:flex-row">
       <div className="text-xs text-muted">
         Menampilkan <span className="font-semibold text-coal">{from}–{to}</span> dari{' '}
-        <span className="font-semibold text-coal">{total}</span> karyawan
+        <span className="font-semibold text-coal">{total}</span> personel
       </div>
       <div className="flex items-center gap-1">
         <button

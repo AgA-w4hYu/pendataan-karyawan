@@ -1,11 +1,11 @@
-# 📋 Sistem Pendataan Karyawan Internal
+# 📋 Sistem Pendataan Personel Internal
 
-Aplikasi web untuk **mencatat data karyawan** menggantikan file Excel manual.
+Aplikasi web untuk **mencatat data personel** menggantikan file Excel manual.
 Cocok dipakai di jaringan internal kantor — **satu admin, tanpa login**.
 
-- ➕ Tambah / edit / hapus karyawan (dengan konfirmasi sebelum hapus)
+- ➕ Tambah / edit / hapus personel (dengan konfirmasi sebelum hapus)
 - 🧩 **Kolom biodata dinamis** — buat kolom sendiri kapan saja (teks, tanggal, angka, dropdown) tanpa ubah kode
-- 🔍 Pencarian nama secara real-time + pagination (ramah untuk 1000-an karyawan)
+- 🔍 Pencarian nama secara real-time + pagination (ramah untuk 1000-an personel)
 - 🎛️ **Filter kolom Dropdown / pilihan** — saring baris tabel, cari pilihan dengan mengetik saat mengisi data, dan batasi data yang diexport
 - 📊 **Export ke Excel (.xlsx)** — pilih kolom (dan opsional filter baris) yang mau diexport, hasilnya tabel rapi (header tebal, border, lebar kolom otomatis)
 - 🗄️ Semua data tersimpan terpusat di **MySQL** (bukan banyak file Excel)
@@ -126,16 +126,16 @@ cd pendataan-karyawan
 
 ## 🎉 Aplikasi Berhasil Jalan — Sekarang Apa?
 
-Saat pertama kali dibuka, aplikasi **otomatis membuat database `pendataan_karyawan`
+Saat pertama kali dibuka, aplikasi **otomatis membuat database `pendataan_personel`
 beserta tabel-tabelnya di MySQL** — Anda tidak perlu import SQL apa pun.
 
-1. **Tambahkan karyawan** → klik tombol **+ Tambah Karyawan** di pojok kanan atas, isi Nama Lengkap (wajib) dan biodata lain, klik **Simpan**.
-2. **Buat kolom biodata baru** → klik **Kelola Kolom** → **+ Tambah Kolom** → isi judul kolom (misal "Nomor BPJS"), pilih tipe (Teks / Tanggal / Angka / Dropdown — untuk dropdown isi pilihan dipisah koma, misal: `IT,HRD,Finance`), klik **Simpan**. Kolom baru **langsung muncul (kosong) di semua karyawan**.
-3. **Edit / hapus karyawan** → tombol **Edit** / **Hapus** di baris karyawan. Hapus selalu menampilkan dialog konfirmasi (data dihapus **permanen**).
-4. **Cari karyawan** → ketik nama di kotak pencarian, tabel langsung terfilter.
-5. **Filter kolom Dropdown** → setiap kolom bertipe Dropdown (misal "Status", "Divisi") otomatis punya filter berbentuk pilihan **di atas tabel**. Pilih salah satu nilai (misal `Aktif`) → tabel hanya menampilkan karyawan yang cocok. Beberapa filter bisa dipakai sekaligus, dan tombol **Reset Filter** menghapus semuanya.
-6. **Isi kolom dropdown saat tambah/edit karyawan** → klik kolomnya lalu **ketik** untuk mencari pilihan dengan cepat (tidak perlu scroll panjang). Bisa juga menghapus nilai yang sudah terisi.
-7. **Export ke Excel** → klik **Export ke Excel** → centang kolom yang diinginkan → (opsional) pakai bagian **Filter Baris** agar hanya karyawan dengan nilai dropdown tertentu yang ikut ter-export → **Export**. Filter yang sedang aktif di tabel ikut diterapkan otomatis. File `.xlsx` terunduh dalam bentuk tabel rapi, siap dikirim.
+1. **Tambahkan personel** → klik tombol **+ Tambah Personel** di pojok kanan atas, isi Nama Lengkap (wajib) dan biodata lain, klik **Simpan**.
+2. **Buat kolom biodata baru** → klik **Kelola Kolom** → **+ Tambah Kolom** → isi judul kolom (misal "Nomor BPJS"), pilih tipe (Teks / Tanggal / Angka / Dropdown — untuk dropdown isi pilihan dipisah koma, misal: `IT,HRD,Finance`), klik **Simpan**. Kolom baru **langsung muncul (kosong) di semua personel**.
+3. **Edit / hapus personel** → tombol **Edit** / **Hapus** di baris personel. Hapus selalu menampilkan dialog konfirmasi (data dihapus **permanen**).
+4. **Cari personel** → ketik nama di kotak pencarian, tabel langsung terfilter.
+5. **Filter kolom Dropdown** → setiap kolom bertipe Dropdown (misal "Status", "Divisi") otomatis punya filter berbentuk pilihan **di atas tabel**. Pilih salah satu nilai (misal `Aktif`) → tabel hanya menampilkan personel yang cocok. Beberapa filter bisa dipakai sekaligus, dan tombol **Reset Filter** menghapus semuanya.
+6. **Isi kolom dropdown saat tambah/edit personel** → klik kolomnya lalu **ketik** untuk mencari pilihan dengan cepat (tidak perlu scroll panjang). Bisa juga menghapus nilai yang sudah terisi.
+7. **Export ke Excel** → klik **Export ke Excel** → centang kolom yang diinginkan → (opsional) pakai bagian **Filter Baris** agar hanya personel dengan nilai dropdown tertentu yang ikut ter-export → **Export**. Filter yang sedang aktif di tabel ikut diterapkan otomatis. File `.xlsx` terunduh dalam bentuk tabel rapi, siap dikirim.
 
 ### (Opsional) Isi data contoh
 Kalau ingin mencoba dengan data contoh dulu:
@@ -161,10 +161,10 @@ phpMyAdmin sudah termasuk dalam XAMPP. Cara membukanya:
 | **macOS / Linux** | Jalankan `./start-pma.sh start` lalu buka **http://127.0.0.1:8080** |
 
 - **Login:** user `root`, **password dikosongkan** (kosongkan saja kolom password, langsung klik Go).
-- Pilih database **`pendataan_karyawan`** di panel kiri untuk melihat 3 tabel:
-  - `employees` — data inti karyawan (nama, tanggal dibuat/diubah)
+- Pilih database **`pendataan_personel`** di panel kiri untuk melihat 3 tabel:
+  - `employees` — data inti personel (nama, tanggal dibuat/diubah)
   - `biodata_fields` — daftar kolom biodata yang Anda buat
-  - `employee_biodata` — nilai biodata per karyawan per kolom
+  - `employee_biodata` — nilai biodata per personel per kolom
 
 > Hati-hati saat menghapus/mengubah data langsung di phpMyAdmin — aplikasi dan
 > phpMyAdmin membaca database yang sama, jadi perubahan langsung terlihat di aplikasi.
@@ -251,7 +251,7 @@ php composer.phar install     # atau: composer install
 ## ❓ FAQ
 
 **Q: Data saya tersimpan di mana?**
-A: Di database MySQL bernama `pendataan_karyawan` — bukan di file Excel. Bisa dilihat lewat phpMyAdmin.
+A: Di database MySQL bernama `pendataan_personel` — bukan di file Excel. Bisa dilihat lewat phpMyAdmin.
 
 **Q: Kalau aplikasi ditutup, data hilang?**
 A: Tidak. Data tetap aman di MySQL. Tutup/buka lagi aplikasi kapan pun, data tetap ada.

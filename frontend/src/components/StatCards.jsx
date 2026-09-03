@@ -1,7 +1,7 @@
 export default function StatCards({ stats, fieldsCount }) {
   const cards = [
-    { label: 'Total Karyawan', value: stats?.total ?? '—' },
-    { label: 'Karyawan Baru Bulan Ini', value: stats?.new_this_month ?? '—' },
+    { label: 'Total Personel', value: stats?.total ?? '—' },
+    { label: 'Personel Baru Bulan Ini', value: stats?.new_this_month ?? '—' },
   ];
 
   return (

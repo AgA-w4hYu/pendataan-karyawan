@@ -1,5 +1,5 @@
 @echo off
-title phpMyAdmin - Pendataan Karyawan
+title phpMyAdmin - Pendataan Personel
 
 echo Di Windows, phpMyAdmin dilayani oleh Apache XAMPP.
 echo.

@@ -166,7 +166,7 @@ export default function EmployeeFormModal({ fields, employee, onSave, onClose })
   };
 
   return (
-    <Modal title={employee ? 'Edit Karyawan' : 'Tambah Karyawan'} onClose={onClose} wide>
+    <Modal title={employee ? 'Edit Personel' : 'Tambah Personel'} onClose={onClose} wide>
       <form onSubmit={submit} className="space-y-4">
         <div>
           <label className="mb-1 block text-xs font-semibold uppercase tracking-wider text-muted">

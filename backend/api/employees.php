@@ -74,7 +74,7 @@ function employees_one(int $id): array
     $stmt->execute([$id]);
     $employee = $stmt->fetch();
     if (!$employee) {
-        json_error('Karyawan tidak ditemukan.', 404);
+        json_error('Personel tidak ditemukan.', 404);
     }
     $employee['biodata'] = [];
     $stmt = db()->prepare('SELECT field_id, value FROM employee_biodata WHERE employee_id = ?');
@@ -184,7 +184,7 @@ function employees_update(int $id): void
     $check = $pdo->prepare('SELECT 1 FROM employees WHERE id = ?');
     $check->execute([$id]);
     if (!$check->fetchColumn()) {
-        json_error('Karyawan tidak ditemukan.', 404);
+        json_error('Personel tidak ditemukan.', 404);
     }
 
     $normalized = normalize_biodata($data['biodata'] ?? []);
@@ -204,11 +204,11 @@ function employees_update(int $id): void
 function employees_delete(int $id): void
 {
     $pdo = db();
-    // Hard delete — data karyawan + seluruh biodatanya terhapus permanen (ON DELETE CASCADE).
+    // Hard delete — data personel + seluruh biodatanya terhapus permanen (ON DELETE CASCADE).
     $stmt = $pdo->prepare('DELETE FROM employees WHERE id = ?');
     $stmt->execute([$id]);
     if ($stmt->rowCount() === 0) {
-        json_error('Karyawan tidak ditemukan.', 404);
+        json_error('Personel tidak ditemukan.', 404);
     }
     json_response(['ok' => true]);
 }

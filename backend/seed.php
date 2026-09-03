@@ -40,7 +40,7 @@ foreach ($fields as $i => [$label, $type, $options]) {
     $fieldIds[] = (int)$pdo->lastInsertId();
 }
 
-// Contoh karyawan
+// Contoh personel
 $samples = [
     ['Budi Santoso', ['081234567890', 'Jl. Merdeka No. 1', '1990-05-12', 'IT', '8500000', 'Aktif']],
     ['Siti Rahayu', ['081298765432', 'Jl. Sudirman No. 45', '1992-11-03', 'HRD', '7000000', 'Aktif']],
@@ -58,5 +58,5 @@ foreach ($samples as [$nama, $values]) {
     }
 }
 
-echo "Seed selesai: " . count($fields) . " field, " . count($samples) . " karyawan contoh.\n";
+echo "Seed selesai: " . count($fields) . " field, " . count($samples) . " personel contoh.\n";
 echo "Gunakan `php seed.php --clear` untuk mengosongkan database.\n";

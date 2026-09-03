@@ -1,5 +1,5 @@
 @echo off
-title Pendataan Karyawan
+title Pendataan Personel
 cd /d "%~dp0"
 
 set "PHP=C:\xampp\php\php.exe"
@@ -34,7 +34,7 @@ if not errorlevel 1 (
 start "" http://127.0.0.1:8081
 echo.
 echo ============================================
-echo  Pendataan Karyawan sedang berjalan
+echo  Pendataan Personel sedang berjalan
 echo  URL: http://127.0.0.1:8081
 echo  Tutup jendela ini untuk menghentikan server.
 echo ============================================
