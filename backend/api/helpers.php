@@ -1,0 +1,40 @@
+<?php
+declare(strict_types=1);
+
+function json_response($data, int $status = 200): never
+{
+    http_response_code($status);
+    header('Content-Type: application/json; charset=utf-8');
+    echo json_encode($data, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+    exit;
+}
+
+function json_error(string $message, int $status = 400): never
+{
+    json_response(['error' => $message], $status);
+}
+
+function method(): string
+{
+    return $_SERVER['REQUEST_METHOD'] ?? 'GET';
+}
+
+function body(): array
+{
+    $raw = file_get_contents('php://input');
+    $data = json_decode($raw ?: '', true);
+    return is_array($data) ? $data : [];
+}
+
+function path_segments(): array
+{
+    $uri = parse_url($_SERVER['REQUEST_URI'] ?? '/', PHP_URL_PATH) ?? '/';
+    $uri = preg_replace('#^/api/?#', '', $uri) ?? '';
+    return array_values(array_filter(explode('/', $uri), fn($s) => $s !== ''));
+}
+
+function clean_text($value, int $max = 255): string
+{
+    $value = trim((string)$value);
+    return mb_strlen($value) > $max ? mb_substr($value, 0, $max) : $value;
+}

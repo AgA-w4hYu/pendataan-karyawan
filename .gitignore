@@ -1,0 +1,14 @@
+# Dependencies
+frontend/node_modules/
+
+# Tools lokal (tidak perlu di-upload — vendor/ & public/ sudah disertakan)
+backend/composer.phar
+
+# File runtime
+*.log
+.app.pid
+.pma.pid
+
+# OS
+.DS_Store
+Thumbs.db
