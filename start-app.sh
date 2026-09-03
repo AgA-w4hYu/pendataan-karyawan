@@ -54,8 +54,16 @@ case "${1:-status}" in
       exit 1
     fi
     mkdir -p "$LOG_DIR"
-    nohup "$PHP_BIN" -d session.save_path="$LOG_DIR" \
-      -S "${HOST}:${PORT}" -t "${ROOT}/public" "${ROOT}/router.php" >> "$LOG" 2>&1 &
+    # Lepaskan proses dari sesi shell agar server tetap hidup setelah skrip selesai
+    # (setsid untuk Linux/Git-Bash; fallback nohup+disown untuk macOS).
+    if command -v setsid >/dev/null 2>&1; then
+      setsid nohup "$PHP_BIN" -d session.save_path="$LOG_DIR" \
+        -S "${HOST}:${PORT}" -t "${ROOT}/public" "${ROOT}/router.php" >> "$LOG" 2>&1 &
+    else
+      nohup "$PHP_BIN" -d session.save_path="$LOG_DIR" \
+        -S "${HOST}:${PORT}" -t "${ROOT}/public" "${ROOT}/router.php" >> "$LOG" 2>&1 &
+      disown 2>/dev/null || true
+    fi
     echo $! > "$PID_FILE"
     sleep 2
     if port_open; then
